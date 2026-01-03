@@ -10,4 +10,11 @@
         <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>id.ac.unpas.goalfound.App</exec.mainClass>
     </properties>
+    <dependencies>
+    <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>itextpdf</artifactId>
+        <version>5.5.13.3</version>
+    </dependency>
+</dependencies>
 </project>
