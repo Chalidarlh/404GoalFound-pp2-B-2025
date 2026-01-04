@@ -4,21 +4,19 @@
  */
 package id.ac.unpas.goalfound.view;
 
-/**
- *
- * @author Muhammad Fauzan nur
- */
-
 import id.ac.unpas.goalfound.controller.TimController;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.ResultSet;
 
-public class TimView extends JFrame {
+/**
+ *
+ * @author Rezaaa
+ */
 
-   
+public class TimView extends JPanel {
+
     private JTextField txtId, txtNama;
     private JComboBox<String> cbFakultas;
     private JButton btnTambah, btnUbah, btnHapus, btnClear;
@@ -28,28 +26,23 @@ public class TimView extends JFrame {
     private TimController controller;
 
     public TimView() {
-        setTitle("Manajemen Tim Futsal UNPAS");
-        setSize(700, 500);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        controller = new TimController(this);
-
         initComponent();
+        
+        controller = new TimController(this);
+        
         initEvent();
     }
 
-    
     private void initComponent() {
         setLayout(new BorderLayout());
 
-       
+        // Form Input
         JPanel panelForm = new JPanel(new GridLayout(4, 2, 10, 10));
-        panelForm.setBorder(BorderFactory.createTitledBorder("Form Tim"));
+        panelForm.setBorder(BorderFactory.createTitledBorder("Form Data Tim"));
 
         panelForm.add(new JLabel("ID Tim"));
         txtId = new JTextField();
-        txtId.setEditable(false);
+        txtId.setEditable(false); 
         panelForm.add(txtId);
 
         panelForm.add(new JLabel("Nama Tim"));
@@ -58,20 +51,13 @@ public class TimView extends JFrame {
 
         panelForm.add(new JLabel("Fakultas"));
         cbFakultas = new JComboBox<>(new String[]{
-                "-- Pilih Fakultas --",
-                "Teknik",
-                "Ekonomi",
-                "Hukum",
-                "FKIP",
-                "FISIP"
+                "-- Pilih Fakultas --", "Teknik", "FEB", "FK", "FKIP", "FH", "FISIP", "SASTRA"
         });
         panelForm.add(cbFakultas);
 
         add(panelForm, BorderLayout.NORTH);
 
-        
         JPanel panelButton = new JPanel(new FlowLayout());
-
         btnTambah = new JButton("Tambah");
         btnUbah = new JButton("Ubah");
         btnHapus = new JButton("Hapus");
@@ -84,7 +70,6 @@ public class TimView extends JFrame {
 
         add(panelButton, BorderLayout.CENTER);
 
-        
         model = new DefaultTableModel(new String[]{"ID", "Nama Tim", "Fakultas"}, 0);
         table = new JTable(model);
         JScrollPane scroll = new JScrollPane(table);
@@ -92,13 +77,10 @@ public class TimView extends JFrame {
         add(scroll, BorderLayout.SOUTH);
     }
 
-    
     private void initEvent() {
-
         btnTambah.addActionListener(e -> controller.tambahTim());
         btnUbah.addActionListener(e -> controller.ubahTim());
         btnHapus.addActionListener(e -> controller.hapusTim());
-
         btnClear.addActionListener(e -> clearForm());
 
         table.getSelectionModel().addListSelectionListener(e -> {
@@ -111,21 +93,22 @@ public class TimView extends JFrame {
         });
     }
 
-    
-    public String getNamaTim() {
-        return txtNama.getText().trim();
+    public String getNamaTim() { 
+        return txtNama.getText().trim(); 
     }
 
     public String getFakultas() {
-        if (cbFakultas.getSelectedIndex() == 0) {
-            return null;
-        }
+        if (cbFakultas.getSelectedIndex() == 0) return null;
         return cbFakultas.getSelectedItem().toString();
     }
 
     public int getIdTim() {
         if (txtId.getText().isEmpty()) return 0;
         return Integer.parseInt(txtId.getText());
+    }
+    
+    public void loadTable() {
+        controller.loadTable();
     }
 
     public void clearForm() {
@@ -137,13 +120,15 @@ public class TimView extends JFrame {
 
     public void tampilkanData(ResultSet rs) {
         try {
-            model.setRowCount(0);
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                        rs.getInt("id_tim"),
-                        rs.getString("nama_tim"),
-                        rs.getString("fakultas")
-                });
+            if (model != null) {
+                model.setRowCount(0);
+                while (rs.next()) {
+                    model.addRow(new Object[]{
+                            rs.getInt("id_tim"),
+                            rs.getString("nama_tim"),
+                            rs.getString("fakultas")
+                    });
+                }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());

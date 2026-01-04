@@ -6,8 +6,9 @@ package id.ac.unpas.goalfound.view;
 
 /**
  *
- * @author Asus
+ * @author 
  */
+
 public class PemainView {
     
 }
