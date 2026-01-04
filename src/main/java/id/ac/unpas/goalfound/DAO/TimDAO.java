@@ -5,7 +5,6 @@
 package id.ac.unpas.goalfound.DAO;
 import id.ac.unpas.goalfound.Model.Tim;
 import id.ac.unpas.goalfound.KoneksiDB;
-import id.ac.unpas.goalfound.KoneksiDB;
 /**
  *
  * @author Muhammad Fauzan nur
