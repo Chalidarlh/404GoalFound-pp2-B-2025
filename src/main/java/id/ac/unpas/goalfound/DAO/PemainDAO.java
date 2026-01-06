@@ -62,16 +62,17 @@ public class PemainDAO {
     }
 
     //sorting
-    public ResultSet loadDataPemainSorted(String urutan) throws Exception {
+    public ResultSet loadDataPemainByTim(int idTim) throws Exception {
     String sql = """
         SELECT p.id_pemain, t.nama_tim, p.nama_pemain, p.npm, p.no_punggung
         FROM pemain p
         JOIN tim t ON p.id_tim = t.id_tim
-        ORDER BY t.nama_tim 
-    """ + urutan;
+        WHERE p.id_tim = ?
+    """;
 
-    Statement st = KoneksiDB.configDB().createStatement();
-    return st.executeQuery(sql);
+    PreparedStatement ps = KoneksiDB.configDB().prepareStatement(sql);
+    ps.setInt(1, idTim);
+    return ps.executeQuery();
 }
 
     // validasi

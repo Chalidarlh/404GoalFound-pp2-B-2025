@@ -127,26 +127,30 @@ public class PemainController {
         }
     }
     
-    //sorting
-    public void loadDataPemainSorted(String urutan) {
-    try {
-        view.model.setRowCount(0);
-        ResultSet rs = dao.loadDataPemainSorted(urutan);
-        int no = 1;
+    // load data pemain berdasarkan tim
+    public void loadDataPemainByTim(int idTim) {
+        try {
+            view.model.setRowCount(0);
+            ResultSet rs = dao.loadDataPemainByTim(idTim);
+            int no = 1;
 
-        while (rs.next()) {
-            view.model.addRow(new Object[]{
-                no++,
-                rs.getString("nama_tim"),
-                rs.getString("nama_pemain"),
-                rs.getString("npm"),
-                rs.getInt("no_punggung")
-            });
+            while (rs.next()) {
+                view.model.addRow(new Object[]{
+                    no++,
+                    rs.getString("nama_tim"),
+                    rs.getString("nama_pemain"),
+                    rs.getString("npm"),
+                    rs.getInt("no_punggung")
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(view, e.getMessage());
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(view, e.getMessage());
     }
-}
+
+    
+
+
 
    
 }
