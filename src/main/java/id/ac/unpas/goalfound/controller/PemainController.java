@@ -119,7 +119,15 @@ public class PemainController {
     // delete data pemain
     public void hapusDataPemain() {
         try {
-            dao.hapusDataPemain(view.txtNpm.getText());
+            String npm = view.txtNpm.getText();
+            
+            if (npm.isEmpty()) {
+                JOptionPane.showMessageDialog(view, "Pilih pemain yang akan dihapus");
+                return;
+            }
+
+            dao.hapusDataPemain(npm);
+            JOptionPane.showMessageDialog(view, "Pemain berhasil dihapus");
             loadDataPemain();
             view.resetForm();
         } catch (Exception e) {

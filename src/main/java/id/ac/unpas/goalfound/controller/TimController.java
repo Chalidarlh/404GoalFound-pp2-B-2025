@@ -94,18 +94,42 @@ public class TimController {
                 throw new Exception("Pilih tim yang akan dihapus");
             }
 
-            int konfirmasi = JOptionPane.showConfirmDialog(
-                    view,
-                    "Yakin ingin menghapus tim ini?",
-                    "Konfirmasi",
-                    JOptionPane.YES_NO_OPTION
-            );
+            boolean punyaJadwal = dao.cekJadwalTerkait(id);
+            boolean punyaPemain = dao.cekPemainTerkait(id);
 
-            if (konfirmasi == JOptionPane.YES_OPTION) {
-                dao.delete(id);
-                JOptionPane.showMessageDialog(view, "Tim berhasil dihapus");
-                loadTable();
-                view.clearForm();
+            if (punyaJadwal || punyaPemain) {
+                StringBuilder info = new StringBuilder("Tim ini memiliki: \n");
+                if (punyaJadwal) info.append("- Jadwal pertandingan\n");
+                if (punyaPemain) info.append("- Pemain terdaftar\n");
+
+                int konfirmasiCascade = JOptionPane.showConfirmDialog(
+                        view,
+                        info + "\nApakah Anda yakin ingin menghapus tim beserta seluruh jadwal dan pemain terkait?",
+                        "Peringatan - Hapus Beserta Relasi",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+
+                if (konfirmasiCascade == JOptionPane.YES_OPTION) {
+                    dao.deleteCascade(id);
+                    JOptionPane.showMessageDialog(view, "Tim, jadwal, dan pemain terkait berhasil dihapus");
+                    loadTable();
+                    view.clearForm();
+                }
+            } else {
+                int konfirmasi = JOptionPane.showConfirmDialog(
+                        view,
+                        "Yakin ingin menghapus tim ini?",
+                        "Konfirmasi",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (konfirmasi == JOptionPane.YES_OPTION) {
+                    dao.delete(id);
+                    JOptionPane.showMessageDialog(view, "Tim berhasil dihapus");
+                    loadTable();
+                    view.clearForm();
+                }
             }
 
         } catch (Exception e) {
