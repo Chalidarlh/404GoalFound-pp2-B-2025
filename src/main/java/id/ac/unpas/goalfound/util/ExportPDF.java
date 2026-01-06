@@ -34,4 +34,30 @@ public class ExportPDF {
         doc.add(pdfTable);
         doc.close();
     }
+
+    public static void exportJadwalPertandingan(JTable table, String fileName) throws Exception {
+        Document doc = new Document();
+        PdfWriter.getInstance(doc, new FileOutputStream(fileName));
+        doc.open();
+
+        Paragraph title = new Paragraph("JADWAL PERTANDINGAN", new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD));
+        title.setAlignment(Element.ALIGN_CENTER);
+        doc.add(title);
+        doc.add(new Paragraph(" "));
+
+        PdfPTable pdfTable = new PdfPTable(table.getColumnCount());
+
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            pdfTable.addCell(table.getColumnName(i));
+        }
+
+        for (int r = 0; r < table.getRowCount(); r++) {
+            for (int c = 0; c < table.getColumnCount(); c++) {
+                pdfTable.addCell(table.getValueAt(r, c).toString());
+            }
+        }
+
+        doc.add(pdfTable);
+        doc.close();
+    }
 }
