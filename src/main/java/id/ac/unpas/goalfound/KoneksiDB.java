@@ -18,7 +18,9 @@ public class KoneksiDB {
 
     public static Connection configDB() throws Exception {
         if (conn == null || conn.isClosed()) {
-
+            // Load MySQL driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
             String url = "jdbc:mysql://localhost:3306/db_goalfound";
             String user = "root";
             String pass = ""; // sesuaikan
