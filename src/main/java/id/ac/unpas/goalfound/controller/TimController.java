@@ -147,5 +147,17 @@ public class TimController {
             JOptionPane.showMessageDialog(view, e.getMessage());
         }
     }
+    
+    
+    public void searchTim(String keyword) {
+    try {
+        ResultSet rs = dao.search(keyword);
+        view.tampilkanData(rs);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(view, e.getMessage());
+    }
+}
+
+
 }
 

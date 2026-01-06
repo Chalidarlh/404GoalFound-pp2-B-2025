@@ -77,5 +77,14 @@ public class TimDAO {
         ps.setInt(1, id);
         return ps.executeQuery().next();
     }
+    
+    public ResultSet search(String keyword) throws Exception {
+    String sql = "SELECT * FROM tim WHERE nama_tim LIKE ? OR fakultas LIKE ?";
+    PreparedStatement ps = KoneksiDB.configDB().prepareStatement(sql);
+    ps.setString(1, "%" + keyword + "%");
+    ps.setString(2, "%" + keyword + "%");
+    return ps.executeQuery();
+}
+
 }
 
