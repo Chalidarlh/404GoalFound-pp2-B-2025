@@ -61,7 +61,20 @@ public class PemainDAO {
         ps.executeUpdate();
     }
 
-    // ================= VALIDASI =================
+    //sorting
+    public ResultSet loadDataPemainSorted(String urutan) throws Exception {
+    String sql = """
+        SELECT p.id_pemain, t.nama_tim, p.nama_pemain, p.npm, p.no_punggung
+        FROM pemain p
+        JOIN tim t ON p.id_tim = t.id_tim
+        ORDER BY t.nama_tim 
+    """ + urutan;
+
+    Statement st = KoneksiDB.configDB().createStatement();
+    return st.executeQuery(sql);
+}
+
+    // validasi
     public boolean cekNpmPemain(String npm) throws Exception {
         String sql = "SELECT npm FROM pemain WHERE npm = ?";
         PreparedStatement ps = KoneksiDB.configDB().prepareStatement(sql);

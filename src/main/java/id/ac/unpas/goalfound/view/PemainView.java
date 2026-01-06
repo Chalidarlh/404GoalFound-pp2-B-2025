@@ -26,6 +26,7 @@ public class PemainView extends JPanel {
     
     private Map<String, Integer> timMap = new HashMap<>();
     private PemainController controller;
+   
 
     public PemainView() {
         initComponents();
@@ -76,6 +77,7 @@ public class PemainView extends JPanel {
         northPanel.add(panelForm, BorderLayout.CENTER);
         northPanel.add(panelAction, BorderLayout.SOUTH);
         add(northPanel, BorderLayout.NORTH);
+        
 
         //Panel Tabel
         String[] columns = {"No", "Nama Tim", "Nama Pemain", "NPM", "No Punggung"};
