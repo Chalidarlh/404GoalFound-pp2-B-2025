@@ -6,9 +6,11 @@ package id.ac.unpas.goalfound.controller;
 
 import id.ac.unpas.goalfound.DAO.JadwalPertandinganDAO;
 import id.ac.unpas.goalfound.Model.JadwalPertandingan;
+import id.ac.unpas.goalfound.util.ExportPDF;
 import java.sql.ResultSet;
 import java.sql.Date;
 import java.sql.Time;
+import javax.swing.JTable;
 
 /**
  *
@@ -145,6 +147,15 @@ public class JadwalPertandinganController {
         } catch (Exception e) {
             System.err.println("Error cek konflik lokasi: " + e.getMessage());
             return false;
+        }
+    }
+
+    public String exportJadwalKeFile(JTable table, String fileName) {
+        try {
+            ExportPDF.exportJadwalPertandingan(table, fileName);
+            return "Berhasil export PDF: " + fileName;
+        } catch (Exception e) {
+            return "Gagal export PDF: " + e.getMessage();
         }
     }
 }
