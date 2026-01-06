@@ -15,3 +15,7 @@ sources.txt
 *.log
 hs_err_pid*
 replay_pid*
+
+data_pemain.pdf
+database_user.sql
+FITUR_LOGIN_README.md
