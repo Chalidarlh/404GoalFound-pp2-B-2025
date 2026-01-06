@@ -61,6 +61,13 @@ public class PemainDAO {
         ps.executeUpdate();
     }
 
+    public void hapusPemainByTim(int idTim) throws Exception {
+        String sql = "DELETE FROM pemain WHERE id_tim = ?";
+        PreparedStatement ps = KoneksiDB.configDB().prepareStatement(sql);
+        ps.setInt(1, idTim);
+        ps.executeUpdate();
+    }
+
     // ================= VALIDASI =================
     public boolean cekNpmPemain(String npm) throws Exception {
         String sql = "SELECT npm FROM pemain WHERE npm = ?";

@@ -1,1 +1,16 @@
 /target/
+/bin/
+sources.txt
+
+# Local Maven install kept out of repo
+/.maven/
+
+# IDE files
+/.idea/
+/.vscode/
+*.iml
+
+# Logs & crash dumps
+*.log
+hs_err_pid*
+replay_pid*
