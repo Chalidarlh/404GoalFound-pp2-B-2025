@@ -61,6 +61,21 @@ public class PemainDAO {
         ps.executeUpdate();
     }
 
+    //sorting
+    public ResultSet loadDataPemainByTim(int idTim) throws Exception {
+    String sql = """
+        SELECT p.id_pemain, t.nama_tim, p.nama_pemain, p.npm, p.no_punggung
+        FROM pemain p
+        JOIN tim t ON p.id_tim = t.id_tim
+        WHERE p.id_tim = ?
+    """;
+
+    PreparedStatement ps = KoneksiDB.configDB().prepareStatement(sql);
+    ps.setInt(1, idTim);
+    return ps.executeQuery();
+}
+
+    // validasi
     public void hapusPemainByTim(int idTim) throws Exception {
         String sql = "DELETE FROM pemain WHERE id_tim = ?";
         PreparedStatement ps = KoneksiDB.configDB().prepareStatement(sql);
