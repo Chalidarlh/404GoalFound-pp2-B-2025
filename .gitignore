@@ -4,6 +4,7 @@ sources.txt
 
 # Local Maven install kept out of repo
 /.maven/
+/.env.local
 
 # IDE files
 /.idea/
