@@ -11,7 +11,6 @@ package id.ac.unpas.goalfound.controller;
 import id.ac.unpas.goalfound.DAO.PemainDAO;
 import id.ac.unpas.goalfound.Model.Pemain;
 import id.ac.unpas.goalfound.view.PemainView;
-import id.ac.unpas.goalfound.util.ExportPDF;
 
 import javax.swing.*;
 import java.sql.ResultSet;
@@ -28,7 +27,7 @@ public class PemainController {
         view.btnTambah.addActionListener(e -> tambahDataPemain());
         view.btnUbah.addActionListener(e -> ubahDataPemain());
         view.btnHapus.addActionListener(e -> hapusDataPemain());
-        view.btnExport.addActionListener(e -> exportPdfPemain());
+       
 
         loadDataPemain();
     }
@@ -36,7 +35,7 @@ public class PemainController {
     // load data pemain
     public void loadDataPemain() {
         try {
-            //view.model.setRowCount(0);
+            view.model.setRowCount(0);
             ResultSet rs = dao.loadDataPemain();
             int no = 1;
 
@@ -65,6 +64,11 @@ public class PemainController {
                 return;
             }
 
+            if (view.getSelectedIdTim() == 0) {
+                JOptionPane.showMessageDialog(view, "Tim wajib dipilih");
+                return;
+            }
+
             if (dao.cekNpmPemain(view.txtNpm.getText())) {
                 JOptionPane.showMessageDialog(view, "NPM sudah terdaftar");
                 return;
@@ -86,9 +90,15 @@ public class PemainController {
         }
     }
 
+
     // update data pemain
     public void ubahDataPemain() {
         try {
+            if (view.getSelectedIdTim() == 0) {
+                JOptionPane.showMessageDialog(view, "Tim wajib dipilih");
+                return;
+            }
+
             Pemain p = new Pemain(
                 view.getSelectedIdTim(),
                 view.txtNama.getText(),
@@ -105,24 +115,50 @@ public class PemainController {
         }
     }
 
+
     // delete data pemain
     public void hapusDataPemain() {
         try {
-            dao.hapusDataPemain(view.txtNpm.getText());
+            String npm = view.txtNpm.getText();
+            
+            if (npm.isEmpty()) {
+                JOptionPane.showMessageDialog(view, "Pilih pemain yang akan dihapus");
+                return;
+            }
+
+            dao.hapusDataPemain(npm);
+            JOptionPane.showMessageDialog(view, "Pemain berhasil dihapus");
             loadDataPemain();
             view.resetForm();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(view, e.getMessage());
         }
     }
-
-    // export pdf
-    public void exportPdfPemain() {
+    
+    // load data pemain berdasarkan tim
+    public void loadDataPemainByTim(int idTim) {
         try {
-            ExportPDF.exportTable(view.tablePemain, "data_pemain.pdf");
-            JOptionPane.showMessageDialog(view, "Export PDF berhasil");
+            view.model.setRowCount(0);
+            ResultSet rs = dao.loadDataPemainByTim(idTim);
+            int no = 1;
+
+            while (rs.next()) {
+                view.model.addRow(new Object[]{
+                    no++,
+                    rs.getString("nama_tim"),
+                    rs.getString("nama_pemain"),
+                    rs.getString("npm"),
+                    rs.getInt("no_punggung")
+                });
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(view, e.getMessage());
         }
     }
+
+    
+
+
+
+   
 }

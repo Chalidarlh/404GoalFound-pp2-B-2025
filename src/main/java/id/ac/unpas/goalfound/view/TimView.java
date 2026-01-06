@@ -22,6 +22,9 @@ public class TimView extends JPanel {
     private JButton btnTambah, btnUbah, btnHapus, btnClear;
     private JTable table;
     private DefaultTableModel model;
+    private JTextField txtSearch;
+    private JButton btnSearch;
+
 
     private TimController controller;
 
@@ -75,6 +78,19 @@ public class TimView extends JPanel {
         JScrollPane scroll = new JScrollPane(table);
 
         add(scroll, BorderLayout.SOUTH);
+        
+        JPanel panelSearch = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelSearch.setBorder(BorderFactory.createTitledBorder("Cari Tim"));
+
+        txtSearch = new JTextField(20);
+        btnSearch = new JButton("Cari");
+
+        panelSearch.add(new JLabel("Nama Tim / Fakultas"));
+        panelSearch.add(txtSearch);
+        panelSearch.add(btnSearch);
+
+        add(panelSearch, BorderLayout.AFTER_LAST_LINE);
+
     }
 
     private void initEvent() {
@@ -82,6 +98,10 @@ public class TimView extends JPanel {
         btnUbah.addActionListener(e -> controller.ubahTim());
         btnHapus.addActionListener(e -> controller.hapusTim());
         btnClear.addActionListener(e -> clearForm());
+        btnSearch.addActionListener(e -> {
+        controller.searchTim(txtSearch.getText().trim());
+        });
+
 
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
@@ -134,5 +154,12 @@ public class TimView extends JPanel {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
+    
+    public JTable getTableTim() {
+    return table;
+}
+
+
+
 }
 

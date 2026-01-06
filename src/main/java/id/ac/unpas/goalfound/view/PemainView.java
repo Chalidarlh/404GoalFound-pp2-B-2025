@@ -26,12 +26,14 @@ public class PemainView extends JPanel {
     
     private Map<String, Integer> timMap = new HashMap<>();
     private PemainController controller;
+    public JComboBox<String> cbFilterTim;
 
     public PemainView() {
         initComponents();
 
         controller = new PemainController(this);
         loadComboTim();
+        loadFilterTim(); 
         loadDataPemain();
     }
 
@@ -71,6 +73,28 @@ public class PemainView extends JPanel {
         panelAction.add(btnHapus);
         panelAction.add(btnExport);
         panelAction.add(btnClear);
+        
+        // ===== FILTER =====
+        panelAction.add(Box.createHorizontalStrut(20)); // jarak
+
+        panelAction.add(new JLabel("Filter Tim:"));
+        cbFilterTim = new JComboBox<>();
+        panelAction.add(cbFilterTim);
+
+        cbFilterTim.addActionListener(e -> {
+            if (controller != null && cbFilterTim.getSelectedItem() != null) {
+                String selectedTim = cbFilterTim.getSelectedItem().toString();
+
+                if (selectedTim.equals("Semua Tim")) {
+                    controller.loadDataPemain();
+                } else {
+                    Integer idTim = timMap.get(selectedTim);
+                    if (idTim != null) {
+                        controller.loadDataPemainByTim(idTim);
+                    }
+                }
+            }
+});
 
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(panelForm, BorderLayout.CENTER);
@@ -136,4 +160,26 @@ public class PemainView extends JPanel {
         if (cbTim.getItemCount() > 0) cbTim.setSelectedIndex(0);
         tablePemain.clearSelection();
     }
+    
+    public void loadFilterTim() {
+        cbFilterTim.removeAllItems();
+
+        cbFilterTim.addItem("Semua Tim");
+
+        try {
+            TimDAO timDao = new TimDAO();
+            ResultSet rs = timDao.getAll();
+            while (rs.next()) {
+                String namaTim = rs.getString("nama_tim");
+                int idTim = rs.getInt("id_tim");
+
+                cbFilterTim.addItem(namaTim);
+                timMap.put(namaTim, idTim); // 🔥 INI PENTING
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+    }
 }
+
+}
+

@@ -44,5 +44,47 @@ public class TimDAO {
         ps.setInt(1, id);
         ps.executeUpdate();
     }
+
+    public void deleteCascade(int id) throws Exception {
+        // Hapus jadwal pertandingan yang melibatkan tim (sebagai tuan atau tamu)
+        String sqlJadwal = "DELETE FROM jadwal_pertandingan WHERE id_tim_tuan=? OR id_tim_tamu=?";
+        PreparedStatement psJadwal = KoneksiDB.configDB().prepareStatement(sqlJadwal);
+        psJadwal.setInt(1, id);
+        psJadwal.setInt(2, id);
+        psJadwal.executeUpdate();
+
+        // Hapus seluruh pemain milik tim
+        String sqlPemain = "DELETE FROM pemain WHERE id_tim=?";
+        PreparedStatement psPemain = KoneksiDB.configDB().prepareStatement(sqlPemain);
+        psPemain.setInt(1, id);
+        psPemain.executeUpdate();
+
+        // Terakhir, hapus tim
+        delete(id);
+    }
+
+    public boolean cekJadwalTerkait(int id) throws Exception {
+        String sql = "SELECT id_jadwal FROM jadwal_pertandingan WHERE id_tim_tuan=? OR id_tim_tamu=?";
+        PreparedStatement ps = KoneksiDB.configDB().prepareStatement(sql);
+        ps.setInt(1, id);
+        ps.setInt(2, id);
+        return ps.executeQuery().next();
+    }
+
+    public boolean cekPemainTerkait(int id) throws Exception {
+        String sql = "SELECT id_pemain FROM pemain WHERE id_tim=?";
+        PreparedStatement ps = KoneksiDB.configDB().prepareStatement(sql);
+        ps.setInt(1, id);
+        return ps.executeQuery().next();
+    }
+    
+    public ResultSet search(String keyword) throws Exception {
+    String sql = "SELECT * FROM tim WHERE nama_tim LIKE ? OR fakultas LIKE ?";
+    PreparedStatement ps = KoneksiDB.configDB().prepareStatement(sql);
+    ps.setString(1, "%" + keyword + "%");
+    ps.setString(2, "%" + keyword + "%");
+    return ps.executeQuery();
+}
+
 }
 
