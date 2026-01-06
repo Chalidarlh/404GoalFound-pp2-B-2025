@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Login View - Minimal UI for Backend
  * @author NNDAAA
  */
 public class LoginView extends JFrame {

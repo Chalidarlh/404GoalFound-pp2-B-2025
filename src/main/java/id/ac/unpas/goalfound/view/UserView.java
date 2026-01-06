@@ -19,7 +19,7 @@ public class UserView extends JPanel {
     private DefaultTableModel tableModel;
     private JTextField txtUsername, txtNamaLengkap, txtEmail, txtPassword;
     private JComboBox<String> cmbRole;
-    private JButton btnTambah, btnUpdate, btnHapus, btnReset, btnRefresh;
+    private JButton btnTambah, btnUpdate, btnHapus, btnReset, btnRefresh, btnResetPassword;
     private UserDAO userDAO;
     private int selectedUserId = -1;
 
@@ -80,7 +80,7 @@ public class UserView extends JPanel {
         formPanel.add(cmbRole);
         formPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        JPanel buttonPanel = new JPanel(new GridLayout(5, 1, 5, 5));
+        JPanel buttonPanel = new JPanel(new GridLayout(6, 1, 5, 5));
         buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
         
         btnTambah = new JButton("Tambah");
@@ -88,12 +88,14 @@ public class UserView extends JPanel {
         btnHapus = new JButton("Hapus");
         btnReset = new JButton("Reset Form");
         btnRefresh = new JButton("Refresh");
+        btnResetPassword = new JButton("Reset Password");
         
         buttonPanel.add(btnTambah);
         buttonPanel.add(btnUpdate);
         buttonPanel.add(btnHapus);
         buttonPanel.add(btnReset);
         buttonPanel.add(btnRefresh);
+        buttonPanel.add(btnResetPassword);
         
         formPanel.add(buttonPanel);
         formPanel.add(Box.createVerticalGlue());
@@ -132,6 +134,7 @@ public class UserView extends JPanel {
         btnHapus.addActionListener(e -> hapusUser());
         btnReset.addActionListener(e -> resetForm());
         btnRefresh.addActionListener(e -> loadData());
+        btnResetPassword.addActionListener(e -> resetPassword());
 
         tableUser.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tableUser.getSelectedRow() != -1) {
@@ -280,5 +283,39 @@ public class UserView extends JPanel {
         btnHapus.setEnabled(false);
         selectedUserId = -1;
         tableUser.clearSelection();
+    }
+
+    private void resetPassword() {
+        if (selectedUserId == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih user terlebih dahulu!");
+            return;
+        }
+
+        String newPassword = JOptionPane.showInputDialog(this, "Masukkan password baru (min 6 karakter):");
+        if (newPassword == null) {
+            return; 
+        }
+        newPassword = newPassword.trim();
+        if (newPassword.length() < 6) {
+            JOptionPane.showMessageDialog(this, "Password minimal 6 karakter!");
+            return;
+        }
+
+        String confirmPassword = JOptionPane.showInputDialog(this, "Konfirmasi password baru:");
+        if (confirmPassword == null) {
+            return; 
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(this, "Password dan konfirmasi tidak sama!");
+            return;
+        }
+
+        try {
+            userDAO.updatePassword(selectedUserId, newPassword);
+            JOptionPane.showMessageDialog(this, "Password berhasil direset!");
+            txtPassword.setText("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
     }
 }
