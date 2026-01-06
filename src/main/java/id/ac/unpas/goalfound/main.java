@@ -4,7 +4,7 @@
  */
 package id.ac.unpas.goalfound;
 
-import id.ac.unpas.goalfound.view.MainFrame;
+import id.ac.unpas.goalfound.view.LoginView;
 import javax.swing.SwingUtilities;
 
 /**
@@ -14,8 +14,8 @@ import javax.swing.SwingUtilities;
 public class main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            MainFrame app = new MainFrame();
-            app.setVisible(true);
+            LoginView loginView = new LoginView();
+            loginView.setVisible(true);
         });
     }
 }
