@@ -127,7 +127,9 @@ public class UserView extends JPanel {
         String[] columns = {"No", "Username", "Nama Lengkap", "Email", "Role"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) { return false; }
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
         
         tableUser = new JTable(tableModel);
@@ -142,7 +144,9 @@ public class UserView extends JPanel {
         JScrollPane scrollPane = new JScrollPane(tableUser);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
-        add(tablePanel, BorderLayout.CENTER);
+        mainPanel.add(formPanel, BorderLayout.WEST);
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
+        add(mainPanel, BorderLayout.CENTER);
 
         btnTambah.addActionListener(e -> tambahUser());
         btnUpdate.addActionListener(e -> updateUser());
@@ -157,38 +161,17 @@ public class UserView extends JPanel {
         });
     }
 
-    private void addInputGroup(JPanel panel, String labelText, JTextField textField) {
-        JLabel label = new JLabel(labelText + ":");
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.add(label);
-        
-        textField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-        textField.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.add(textField);
-        panel.add(Box.createVerticalStrut(10));
-    }
-
-    private JButton createWideButton(String text) {
-        JButton btn = new JButton(text);
-        btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
-        btn.setAlignmentX(Component.LEFT_ALIGNMENT);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        return btn;
-    }
-    
     private void loadData() {
         tableModel.setRowCount(0);
-    try {
-        ResultSet rs = userDAO.getAll();
-        int no = 1; 
-        while (rs.next()) {
-            Object[] row = {
-                no++,
+        try {
+            ResultSet rs = userDAO.getAll();
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getInt("id_user"),
                     rs.getString("username"),
                     rs.getString("nama_lengkap"),
                     rs.getString("email"),
-                    rs.getString("role"),
-                    rs.getInt("id_user")
+                    rs.getString("role")
                 };
                 tableModel.addRow(row);
             }
@@ -224,6 +207,7 @@ public class UserView extends JPanel {
             JOptionPane.showMessageDialog(this, "Username, Password, dan Nama Lengkap wajib diisi!");
             return;
         }
+
         if (password.length() < 6) {
             JOptionPane.showMessageDialog(this, "Password minimal 6 karakter!");
             return;
@@ -234,6 +218,7 @@ public class UserView extends JPanel {
                 JOptionPane.showMessageDialog(this, "Username sudah digunakan!");
                 return;
             }
+
             User user = new User(username, password, namaLengkap, email, role);
             userDAO.insert(user);
             JOptionPane.showMessageDialog(this, "User berhasil ditambahkan!");
@@ -294,7 +279,6 @@ public class UserView extends JPanel {
             }
         }
     }
-
 
     private void resetForm() {
         txtUsername.setText("");
