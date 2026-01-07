@@ -124,7 +124,7 @@ public class UserView extends JPanel {
         tablePanel.setBackground(Color.WHITE);
         tablePanel.setBorder(BorderFactory.createTitledBorder("Data User"));
 
-        String[] columns = {"ID", "Username", "Nama Lengkap", "Email", "Role"};
+        String[] columns = {"No", "Username", "Nama Lengkap", "Email", "Role"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {

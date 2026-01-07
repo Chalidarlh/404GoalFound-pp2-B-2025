@@ -83,7 +83,7 @@ public class TimView extends JPanel {
 
         add(panelHeader, BorderLayout.NORTH);
 
-        model = new DefaultTableModel(new String[]{"ID", "Nama Tim", "Fakultas"}, 0);
+        model = new DefaultTableModel(new String[]{"No", "Nama Tim", "Fakultas"}, 0);
         table = new JTable(model);
         JScrollPane scroll = new JScrollPane(table);
 
