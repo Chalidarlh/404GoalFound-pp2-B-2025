@@ -4,6 +4,7 @@
  */
 package id.ac.unpas.goalfound.view;
 
+import id.ac.unpas.goalfound.util.UserSession;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -24,6 +25,7 @@ public class MainFrame extends JFrame {
     private TimView timView;
     private PemainView pemainView;
     private JadwalPertandinganView jadwalView;
+    private UserView userView;
 
     private final Color PRIMARY_COLOR = new Color(41, 128, 185);
     private final Color SIDEBAR_COLOR = new Color(52, 73, 94);
@@ -44,14 +46,39 @@ public class MainFrame extends JFrame {
         sidebar.setBorder(new EmptyBorder(20, 10, 20, 10));
 
         JLabel logo = new JLabel("GOALFOUND");
+        logo.setFont(new Font("Segoe UI", Font.BOLD, 24));
         logo.setForeground(Color.WHITE);
         logo.setAlignmentX(Component.CENTER_ALIGNMENT);
         sidebar.add(logo);
-        sidebar.add(Box.createRigidArea(new Dimension(0, 40)));
+        sidebar.add(Box.createRigidArea(new Dimension(0, 10)));
+        
+        JPanel userInfoPanel = new JPanel();
+        userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
+        userInfoPanel.setBackground(new Color(44, 62, 80));
+        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        userInfoPanel.setMaximumSize(new Dimension(230, 80));
+        
+        JLabel lblUserName = new JLabel(UserSession.getInstance().getNamaLengkap());
+        lblUserName.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblUserName.setForeground(Color.WHITE);
+        lblUserName.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        JLabel lblUserRole = new JLabel("(" + UserSession.getInstance().getRole().toUpperCase() + ")");
+        lblUserRole.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        lblUserRole.setForeground(new Color(149, 165, 166));
+        lblUserRole.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        userInfoPanel.add(lblUserName);
+        userInfoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        userInfoPanel.add(lblUserRole);
+        
+        sidebar.add(userInfoPanel);
+        sidebar.add(Box.createRigidArea(new Dimension(0, 30)));
 
         JButton btnTim = createMenuButton("Manajemen Tim");
         JButton btnPemain = createMenuButton("Manajemen Pemain");
         JButton btnJadwal = createMenuButton("Jadwal Tanding");
+        JButton btnUser = createMenuButton("Manajemen User");
         JButton btnKeluar = createMenuButton("Keluar");
 
         sidebar.add(btnTim);
@@ -59,6 +86,13 @@ public class MainFrame extends JFrame {
         sidebar.add(btnPemain);
         sidebar.add(Box.createRigidArea(new Dimension(0, 10)));
         sidebar.add(btnJadwal);
+        sidebar.add(Box.createRigidArea(new Dimension(0, 10)));
+        
+        if (UserSession.getInstance().isAdmin()) {
+            sidebar.add(btnUser);
+            sidebar.add(Box.createRigidArea(new Dimension(0, 10)));
+        }
+        
         sidebar.add(Box.createVerticalGlue());
         sidebar.add(btnKeluar);
 
@@ -85,10 +119,12 @@ public class MainFrame extends JFrame {
         timView = new TimView();
         pemainView = new PemainView();
         jadwalView = new JadwalPertandinganView();
+        userView = new UserView();
 
         mainPanel.add(timView, "TIM");
         mainPanel.add(pemainView, "PEMAIN");
         mainPanel.add(jadwalView, "JADWAL");
+        mainPanel.add(userView, "USER");
 
         rightPanel.add(mainPanel, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.CENTER);
@@ -111,10 +147,25 @@ public class MainFrame extends JFrame {
             jadwalView.loadData();
             cardLayout.show(mainPanel, "JADWAL");
         });
+        
+        btnUser.addActionListener(e -> {
+            lblTitle.setText(" Manajemen User");
+            cardLayout.show(mainPanel, "USER");
+        });
 
         btnKeluar.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(this, "Keluar dari aplikasi?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "Apakah Anda yakin ingin logout?", 
+                "Konfirmasi Logout", 
+                JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                UserSession.getInstance().logout();
+                dispose();
+                SwingUtilities.invokeLater(() -> {
+                    LoginView loginView = new LoginView();
+                    loginView.setVisible(true);
+                });
+            }
         });
     }
 

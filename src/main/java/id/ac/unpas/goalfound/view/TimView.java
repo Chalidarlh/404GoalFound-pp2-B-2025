@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 
 public class TimView extends JPanel {
 
-    private JTextField txtId, txtNama;
+    private JTextField txtNama;
     private JComboBox<String> cbFakultas;
     private JButton btnTambah, btnUbah, btnHapus, btnClear;
     private JTable table;
@@ -25,28 +25,25 @@ public class TimView extends JPanel {
     private JTextField txtSearch;
     private JButton btnSearch;
 
+    private int selectedId = 0;
 
     private TimController controller;
 
     public TimView() {
         initComponent();
-        
         controller = new TimController(this);
-        
         initEvent();
     }
 
     private void initComponent() {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Form Input
-        JPanel panelForm = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panelHeader = new JPanel();
+        panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.Y_AXIS));
+
+        JPanel panelForm = new JPanel(new GridLayout(2, 2, 10, 10));
         panelForm.setBorder(BorderFactory.createTitledBorder("Form Data Tim"));
-
-        panelForm.add(new JLabel("ID Tim"));
-        txtId = new JTextField();
-        txtId.setEditable(false); 
-        panelForm.add(txtId);
 
         panelForm.add(new JLabel("Nama Tim"));
         txtNama = new JTextField();
@@ -58,9 +55,9 @@ public class TimView extends JPanel {
         });
         panelForm.add(cbFakultas);
 
-        add(panelForm, BorderLayout.NORTH);
+        panelHeader.add(panelForm);
 
-        JPanel panelButton = new JPanel(new FlowLayout());
+        JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
         btnTambah = new JButton("Tambah");
         btnUbah = new JButton("Ubah");
         btnHapus = new JButton("Hapus");
@@ -71,26 +68,26 @@ public class TimView extends JPanel {
         panelButton.add(btnHapus);
         panelButton.add(btnClear);
 
-        add(panelButton, BorderLayout.CENTER);
+        panelHeader.add(panelButton);
+
+        JPanel panelSearch = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelSearch.setBorder(BorderFactory.createTitledBorder("Cari Tim"));
+
+        panelSearch.add(new JLabel("Nama Tim / Fakultas:"));
+        txtSearch = new JTextField(20);
+        panelSearch.add(txtSearch);
+        btnSearch = new JButton("Cari");
+        panelSearch.add(btnSearch);
+
+        panelHeader.add(panelSearch);
+
+        add(panelHeader, BorderLayout.NORTH);
 
         model = new DefaultTableModel(new String[]{"ID", "Nama Tim", "Fakultas"}, 0);
         table = new JTable(model);
         JScrollPane scroll = new JScrollPane(table);
 
-        add(scroll, BorderLayout.SOUTH);
-        
-        JPanel panelSearch = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelSearch.setBorder(BorderFactory.createTitledBorder("Cari Tim"));
-
-        txtSearch = new JTextField(20);
-        btnSearch = new JButton("Cari");
-
-        panelSearch.add(new JLabel("Nama Tim / Fakultas"));
-        panelSearch.add(txtSearch);
-        panelSearch.add(btnSearch);
-
-        add(panelSearch, BorderLayout.AFTER_LAST_LINE);
-
+        add(scroll, BorderLayout.CENTER);
     }
 
     private void initEvent() {
@@ -99,14 +96,17 @@ public class TimView extends JPanel {
         btnHapus.addActionListener(e -> controller.hapusTim());
         btnClear.addActionListener(e -> clearForm());
         btnSearch.addActionListener(e -> {
-        controller.searchTim(txtSearch.getText().trim());
+            controller.searchTim(txtSearch.getText().trim());
         });
-
 
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
                 int row = table.getSelectedRow();
-                txtId.setText(model.getValueAt(row, 0).toString());
+                try {
+                    selectedId = Integer.parseInt(model.getValueAt(row, 0).toString());
+                } catch (NumberFormatException ex) {
+                    selectedId = 0;
+                }
                 txtNama.setText(model.getValueAt(row, 1).toString());
                 cbFakultas.setSelectedItem(model.getValueAt(row, 2).toString());
             }
@@ -123,8 +123,7 @@ public class TimView extends JPanel {
     }
 
     public int getIdTim() {
-        if (txtId.getText().isEmpty()) return 0;
-        return Integer.parseInt(txtId.getText());
+        return selectedId;
     }
     
     public void loadTable() {
@@ -132,7 +131,7 @@ public class TimView extends JPanel {
     }
 
     public void clearForm() {
-        txtId.setText("");
+        selectedId = 0;
         txtNama.setText("");
         cbFakultas.setSelectedIndex(0);
         table.clearSelection();
@@ -156,10 +155,7 @@ public class TimView extends JPanel {
     }
     
     public JTable getTableTim() {
-    return table;
-}
-
-
-
+        return table;
+    }
 }
 

@@ -52,43 +52,90 @@ public class PemainController {
             JOptionPane.showMessageDialog(view, e.getMessage());
         }
     }
+    
+    // validasi huruf saja (nama)
+    private boolean isOnlyLetters(String text) {
+        return text.matches("[a-zA-Z ]+");
+    }
+
+    // validasi angka saja
+    private boolean isOnlyNumbers(String text) {
+        return text.matches("\\d+");
+    }
+
 
     // tambah data pemain
     public void tambahDataPemain() {
-        try {
-            if (view.txtNama.getText().isEmpty() ||
-                view.txtNpm.getText().isEmpty() ||
-                view.txtNo.getText().isEmpty()) {
+    try {
+        String nama = view.txtNama.getText().trim();
+        String npm = view.txtNpm.getText().trim();
+        String no = view.txtNo.getText().trim();
 
-                JOptionPane.showMessageDialog(view, "Data tidak boleh kosong");
-                return;
-            }
-
-            if (view.getSelectedIdTim() == 0) {
-                JOptionPane.showMessageDialog(view, "Tim wajib dipilih");
-                return;
-            }
-
-            if (dao.cekNpmPemain(view.txtNpm.getText())) {
-                JOptionPane.showMessageDialog(view, "NPM sudah terdaftar");
-                return;
-            }
-
-            Pemain p = new Pemain(
-                view.getSelectedIdTim(),
-                view.txtNama.getText(),
-                view.txtNpm.getText(),
-                Integer.parseInt(view.txtNo.getText())
-            );
-
-            dao.tambahDataPemain(p);
-            loadDataPemain();
-            view.resetForm();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(view, e.getMessage());
+        // ================= CEK KOSONG =================
+        if (nama.isEmpty()) {
+            JOptionPane.showMessageDialog(view, "Nama pemain tidak boleh kosong");
+            return;
         }
+
+        if (npm.isEmpty()) {
+            JOptionPane.showMessageDialog(view, "NPM tidak boleh kosong");
+            return;
+        }
+
+        if (no.isEmpty()) {
+            JOptionPane.showMessageDialog(view, "No punggung tidak boleh kosong");
+            return;
+        }
+
+        // ================= VALIDASI NAMA =================
+        if (!isOnlyLetters(nama)) {
+            JOptionPane.showMessageDialog(view, "Nama pemain hanya boleh berisi huruf");
+            return;
+        }
+
+        // ================= VALIDASI NPM =================
+        if (!isOnlyNumbers(npm)) {
+            JOptionPane.showMessageDialog(view, "NPM harus berupa angka");
+            return;
+        }
+
+        if (npm.length() > 10) {
+            JOptionPane.showMessageDialog(view, "NPM tidak boleh lebih dari 10 angka");
+            return;
+        }
+
+        if (dao.cekNpmPemain(npm)) {
+            JOptionPane.showMessageDialog(view, "NPM sudah terdaftar");
+            return;
+        }
+
+        // ================= VALIDASI NO PUNGGUNG =================
+        if (!isOnlyNumbers(no)) {
+            JOptionPane.showMessageDialog(view, "No punggung harus berupa angka");
+            return;
+        }
+
+        if (view.getSelectedIdTim() == 0) {
+            JOptionPane.showMessageDialog(view, "Tim wajib dipilih");
+            return;
+        }
+
+        Pemain p = new Pemain(
+            view.getSelectedIdTim(),
+            nama,
+            npm,
+            Integer.parseInt(no)
+        );
+
+        dao.tambahDataPemain(p);
+        loadDataPemain();
+        view.resetForm();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(view, e.getMessage());
     }
+}
+
 
 
     // update data pemain
@@ -153,12 +200,11 @@ public class PemainController {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(view, e.getMessage());
-        }
     }
+       
+    }
+}
 
     
 
 
-
-   
-}
