@@ -111,7 +111,7 @@ public class JadwalPertandinganView extends JPanel {
 
         add(panelHeader, BorderLayout.NORTH);
 
-        model = new DefaultTableModel(new String[]{"ID", "Tuan", "Tamu", "Tanggal", "Waktu", "Lokasi", "Status"}, 0);
+        model = new DefaultTableModel(new String[]{"No", "Tuan", "Tamu", "Tanggal", "Waktu", "Lokasi", "Status"}, 0);
         table = new JTable(model);
         JScrollPane scroll = new JScrollPane(table);
 
