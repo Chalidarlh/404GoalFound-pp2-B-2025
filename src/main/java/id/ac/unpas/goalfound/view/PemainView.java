@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class PemainView extends JPanel {
     public JTextField txtNama, txtNpm, txtNo;
     public JComboBox<String> cbTim;
-    public JButton btnTambah, btnUbah, btnHapus, btnExport, btnClear;
+    public JButton btnTambah, btnUbah, btnHapus, btnClear;
     public JTable tablePemain;
     public DefaultTableModel model;
     
@@ -65,17 +65,14 @@ public class PemainView extends JPanel {
         btnTambah = new JButton("Tambah");
         btnUbah = new JButton("Ubah");
         btnHapus = new JButton("Hapus");
-        btnExport = new JButton("Export PDF");
         btnClear = new JButton("Clear");
 
         panelAction.add(btnTambah);
         panelAction.add(btnUbah);
         panelAction.add(btnHapus);
-        panelAction.add(btnExport);
         panelAction.add(btnClear);
         
-        // ===== FILTER =====
-        panelAction.add(Box.createHorizontalStrut(20)); // jarak
+        panelAction.add(Box.createHorizontalStrut(20)); 
 
         panelAction.add(new JLabel("Filter Tim:"));
         cbFilterTim = new JComboBox<>();
@@ -101,7 +98,6 @@ public class PemainView extends JPanel {
         northPanel.add(panelAction, BorderLayout.SOUTH);
         add(northPanel, BorderLayout.NORTH);
 
-        //Panel Tabel
         String[] columns = {"No", "Nama Tim", "Nama Pemain", "NPM", "No Punggung"};
         model = new DefaultTableModel(columns, 0);
         tablePemain = new JTable(model);
@@ -122,7 +118,6 @@ public class PemainView extends JPanel {
         });
     }
 
-    //ambil data tim untuk ComboBox
     public void loadComboTim() {
         cbTim.removeAllItems();
         timMap.clear();
@@ -174,7 +169,7 @@ public class PemainView extends JPanel {
                 int idTim = rs.getInt("id_tim");
 
                 cbFilterTim.addItem(namaTim);
-                timMap.put(namaTim, idTim); // 🔥 INI PENTING
+                timMap.put(namaTim, idTim); 
             }
         } catch (Exception e) {
             e.printStackTrace();
