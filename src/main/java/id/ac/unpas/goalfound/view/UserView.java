@@ -19,7 +19,7 @@ public class UserView extends JPanel {
     private DefaultTableModel tableModel;
     private JTextField txtUsername, txtNamaLengkap, txtEmail, txtPassword;
     private JComboBox<String> cmbRole;
-    private JButton btnTambah, btnUpdate, btnHapus, btnReset, btnRefresh, btnResetPassword;
+    private JButton btnTambah, btnUpdate, btnHapus, btnReset, btnResetPassword;
     private UserDAO userDAO;
     private int selectedUserId = -1;
 
@@ -40,65 +40,85 @@ public class UserView extends JPanel {
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
         headerPanel.add(lblTitle);
         add(headerPanel, BorderLayout.NORTH);
-
         JPanel mainPanel = new JPanel(new BorderLayout(10, 0));
         mainPanel.setBackground(Color.WHITE);
-
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(Color.WHITE);
         formPanel.setBorder(BorderFactory.createTitledBorder("Form User"));
-        formPanel.setPreferredSize(new Dimension(300, 0));
-
-        formPanel.add(new JLabel("Username:"));
+        formPanel.setPreferredSize(new Dimension(320, 0)); 
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5); 
+        gbc.anchor = GridBagConstraints.WEST; 
+        
+        gbc.gridx = 0; gbc.gridy = 0; 
+        gbc.weightx = 0; gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(new JLabel("Username:"), gbc);
+        
+        gbc.gridx = 0; gbc.gridy = 1; 
+        gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
         txtUsername = new JTextField();
-        txtUsername.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        formPanel.add(txtUsername);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        formPanel.add(txtUsername, gbc);
 
-        formPanel.add(new JLabel("Password:"));
+        gbc.gridx = 0; gbc.gridy = 2; 
+        gbc.weightx = 0; gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(new JLabel("Password:"), gbc);
+        
+        gbc.gridx = 0; gbc.gridy = 3; 
+        gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
         txtPassword = new JTextField();
-        txtPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        formPanel.add(txtPassword);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        formPanel.add(txtPassword, gbc);
 
-        formPanel.add(new JLabel("Nama Lengkap:"));
+        gbc.gridx = 0; gbc.gridy = 4; 
+        gbc.weightx = 0; gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(new JLabel("Nama Lengkap:"), gbc);
+        
+        gbc.gridx = 0; gbc.gridy = 5; 
+        gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
         txtNamaLengkap = new JTextField();
-        txtNamaLengkap.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        formPanel.add(txtNamaLengkap);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        formPanel.add(txtNamaLengkap, gbc);
 
-        formPanel.add(new JLabel("Email:"));
+        gbc.gridx = 0; gbc.gridy = 6; 
+        gbc.weightx = 0; gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(new JLabel("Email:"), gbc);
+        
+        gbc.gridx = 0; gbc.gridy = 7; 
+        gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
         txtEmail = new JTextField();
-        txtEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        formPanel.add(txtEmail);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        formPanel.add(txtEmail, gbc);
 
-        formPanel.add(new JLabel("Role:"));
+        gbc.gridx = 0; gbc.gridy = 8; 
+        gbc.weightx = 0; gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(new JLabel("Role:"), gbc);
+        
+        gbc.gridx = 0; gbc.gridy = 9; 
+        gbc.weightx = 1.0; gbc.fill = GridBagConstraints.HORIZONTAL;
         cmbRole = new JComboBox<>(new String[]{"admin", "staff"});
-        cmbRole.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        formPanel.add(cmbRole);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        formPanel.add(cmbRole, gbc);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(6, 1, 5, 5));
-        buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 2, 5, 5));
+        buttonPanel.setBackground(Color.WHITE);
         
         btnTambah = new JButton("Tambah");
-        btnUpdate = new JButton("Update");
+        btnUpdate = new JButton("Ubah");
         btnHapus = new JButton("Hapus");
-        btnReset = new JButton("Reset Form");
-        btnRefresh = new JButton("Refresh");
-        btnResetPassword = new JButton("Reset Password");
+        btnReset = new JButton("Clear");
+        btnResetPassword = new JButton("Ubah Pass");
         
         buttonPanel.add(btnTambah);
         buttonPanel.add(btnUpdate);
         buttonPanel.add(btnHapus);
         buttonPanel.add(btnReset);
-        buttonPanel.add(btnRefresh);
         buttonPanel.add(btnResetPassword);
         
-        formPanel.add(buttonPanel);
-        formPanel.add(Box.createVerticalGlue());
+        gbc.gridx = 0; gbc.gridy = 10;
+        gbc.weighty = 0; 
+        gbc.insets = new Insets(15, 5, 5, 5);
+        formPanel.add(buttonPanel, gbc);
+        
+        gbc.gridx = 0; gbc.gridy = 11;
+        gbc.weighty = 1.0;
+        formPanel.add(Box.createVerticalGlue(), gbc);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBackground(Color.WHITE);
@@ -115,12 +135,11 @@ public class UserView extends JPanel {
         tableUser = new JTable(tableModel);
         tableUser.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tableUser.getTableHeader().setReorderingAllowed(false);
-        
-        tableUser.getColumnModel().getColumn(0).setPreferredWidth(50);
-        tableUser.getColumnModel().getColumn(1).setPreferredWidth(120);
-        tableUser.getColumnModel().getColumn(2).setPreferredWidth(180);
-        tableUser.getColumnModel().getColumn(3).setPreferredWidth(180);
-        tableUser.getColumnModel().getColumn(4).setPreferredWidth(80);
+        tableUser.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tableUser.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tableUser.getColumnModel().getColumn(2).setPreferredWidth(150);
+        tableUser.getColumnModel().getColumn(3).setPreferredWidth(150);
+        tableUser.getColumnModel().getColumn(4).setPreferredWidth(70);
 
         JScrollPane scrollPane = new JScrollPane(tableUser);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
@@ -133,7 +152,6 @@ public class UserView extends JPanel {
         btnUpdate.addActionListener(e -> updateUser());
         btnHapus.addActionListener(e -> hapusUser());
         btnReset.addActionListener(e -> resetForm());
-        btnRefresh.addActionListener(e -> loadData());
         btnResetPassword.addActionListener(e -> resetPassword());
 
         tableUser.getSelectionModel().addListSelectionListener(e -> {
@@ -230,15 +248,6 @@ public class UserView extends JPanel {
         try {
             User user = new User(selectedUserId, username, "", namaLengkap, email, role);
             userDAO.update(user);
-            
-            String newPassword = txtPassword.getText().trim();
-            if (!newPassword.isEmpty()) {
-                if (newPassword.length() < 6) {
-                    JOptionPane.showMessageDialog(this, "Password minimal 6 karakter!");
-                    return;
-                }
-                userDAO.updatePassword(selectedUserId, newPassword);
-            }
             
             JOptionPane.showMessageDialog(this, "User berhasil diupdate!");
             resetForm();

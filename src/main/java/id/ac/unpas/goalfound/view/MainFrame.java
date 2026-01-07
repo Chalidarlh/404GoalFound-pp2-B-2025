@@ -33,7 +33,7 @@ public class MainFrame extends JFrame {
     private final Color TEXT_COLOR = Color.WHITE;
 
     public MainFrame() {
-        setTitle("GoalFound - Futsal Management System");
+        setTitle("GoalFound - Pendaftaran Liga Futsal UNPAS");
         setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
