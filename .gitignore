@@ -1,0 +1,21 @@
+/target/
+/bin/
+sources.txt
+
+# Local Maven install kept out of repo
+/.maven/
+/.env.local
+
+# IDE files
+/.idea/
+/.vscode/
+*.iml
+
+# Logs & crash dumps
+*.log
+hs_err_pid*
+replay_pid*
+
+data_pemain.pdf
+database_user.sql
+FITUR_LOGIN_README.md
